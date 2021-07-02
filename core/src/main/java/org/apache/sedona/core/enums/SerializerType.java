@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.sedona.core.serde;
-
-import com.esotericsoftware.kryo.Kryo;
-import org.apache.sedona.core.serde.shape.ShapeGeometrySerde;
-import org.apache.sedona.core.serde.spatialindex.SpatialIndexSerde;
-import org.apache.spark.serializer.KryoRegistrator;
+package org.apache.sedona.core.enums;
 
 /**
- * Register Kryo classes using the Geometry Serde(using the ShapeFile serialization)
- * and SpatialIndexSerde for index objects
+ * Spark Kryo Serializer type
  */
-public class SedonaKryoRegistrator
-        implements KryoRegistrator {
-
-    @Override
-    public void registerClasses(Kryo kryo) {
-        ShapeGeometrySerde serializer = new ShapeGeometrySerde();
-        SpatialIndexSerde indexSerializer = new SpatialIndexSerde();
-
-        SedonaKryoRegistratorHelper.registerClasses(kryo, serializer, indexSerializer);
+public enum SerializerType {
+    
+    SHAPE,
+    WKB;
+    
+    /**
+     * Gets the serializer type.
+     *
+     * @param str the str
+     * @return the index type
+     */
+    public static SerializerType getSerializerType(String str)
+    {
+        for (SerializerType me : SerializerType.values()) {
+            if (me.name().equalsIgnoreCase(str)) { return me; }
+        }
+        return null;
     }
 }
